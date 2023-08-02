@@ -1,8 +1,10 @@
 package HttpUtils;
 
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 public class HttpStatusChecker {
@@ -11,13 +13,20 @@ public class HttpStatusChecker {
 
     public String getStatusImage(int code) {
         String urlImage = url + code + ".jpg";
+
         try {
-            Jsoup.connect(urlImage)
+            int statusCode = Jsoup.connect(urlImage)
                     .ignoreContentType(true)
-                    .execute();
+                    .execute()
+                    .statusCode();
+            if (statusCode == 404) {
+                throw new IOException();
+            } else {
+                return urlImage;
+            }
         } catch (IOException ex) {
             LOGGER.error("NOT FOUND", ex);
+            return "";
         }
-        return urlImage;
     }
 }
