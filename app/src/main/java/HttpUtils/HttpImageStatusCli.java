@@ -1,11 +1,11 @@
 package HttpUtils;
 
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.util.Scanner;
 
-@Data
 public class HttpImageStatusCli {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpImageStatusCli.class);
 
@@ -13,8 +13,8 @@ public class HttpImageStatusCli {
         int code = enterCode();
         try {
             new HttpStatusImageDownloader().downloadStatusImage(code);
-        } catch (Exception ex) {
-            LOGGER.error("There is not image for HTTP status " + code, ex);
+        } catch (IOException ex) {
+            LOGGER.error("There is not image for this HTTP status " + code, ex);
         }
     }
 
